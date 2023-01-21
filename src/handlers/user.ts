@@ -33,9 +33,16 @@ export class UserHandler {
             lastName: String(req.body.lastName),
             password: String(req.body.password)
         }
-        const store = new UserStore()
-        const result = await store.create(user)
-        res.send(result)
+
+        try {
+            const store = new UserStore()
+            const result = await store.create(user)
+            var token = jwt.sign({ user: result }, TOKEN_SECRET  as Secret);
+            res.json(token)
+        } catch(err) {
+            res.status(400)
+            res.json(err as string + user)
+        }
     }
 
     async edit(req: Request, res: Response) {

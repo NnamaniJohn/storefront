@@ -10,7 +10,7 @@ users.get('/', verifyAuthToken, userHandler.index)
 
 users.get('/:id/show', verifyAuthToken, userHandler.show)
 
-users.post('/create', verifyAuthToken, userHandler.create)
+users.post('/create', userHandler.create)
 
 users.put('/:id/update', verifyAuthToken, userHandler.edit)
 
