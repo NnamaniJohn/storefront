@@ -55,12 +55,26 @@ export class OrderHandler {
     async addProduct(_req: Request, res: Response) {
         const store = new OrderStore()
         const orderId: string = _req.params.id
-        const productId: string = _req.body.productId
+        const productId: string = _req.body.product_id
         const quantity: number = parseInt(_req.body.quantity)
 
         try {
             const addedProduct = await store.addProduct(quantity, orderId, productId)
             res.json(addedProduct)
+        } catch(err) {
+            res.status(400)
+            res.json(err)
+        }
+    }
+
+    async removeProduct(_req: Request, res: Response) {
+        const store = new OrderStore()
+        const orderId: string = _req.params.id
+        const productId: string = _req.body.product_id
+
+        try {
+            const prod = await store.removeProduct(orderId, productId)
+            res.json(prod)
         } catch(err) {
             res.status(400)
             res.json(err)

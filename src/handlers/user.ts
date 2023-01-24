@@ -29,8 +29,8 @@ export class UserHandler {
 
     async create(req: Request, res: Response) {
         const user: User = {
-            firstName: String(req.body.firstName),
-            lastName: String(req.body.lastName),
+            firstname: String(req.body.firstname),
+            lastname: String(req.body.lastname),
             password: String(req.body.password)
         }
 
@@ -48,8 +48,8 @@ export class UserHandler {
     async edit(req: Request, res: Response) {
         const user: User = {
             id: Number(req.params.id),
-            firstName: String(req.body.firstName),
-            lastName: String(req.body.lastName),
+            firstname: String(req.body.firstname),
+            lastname: String(req.body.lastname),
             password: String(req.body.password)
         }
         const store = new UserStore
@@ -67,8 +67,8 @@ export class UserHandler {
     async signIn(req: Request, res: Response) {
         try {
             const user: User = {
-                firstName: String(req.body.firstName),
-                lastName: String(req.body.lastName),
+                firstname: String(req.body.firstname),
+                lastname: String(req.body.lastname),
                 password: String(req.body.password)
             }
             const store = new UserStore()

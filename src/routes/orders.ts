@@ -17,6 +17,8 @@ orders.delete('/:id/delete', verifyAuthToken, orderHandler.delete)
 
 orders.post('/:id/products', verifyAuthToken, orderHandler.addProduct)
 
+orders.delete('/:id/products/delete', verifyAuthToken, orderHandler.removeProduct)
+
 orders.get('/user/:id/show', verifyAuthToken, orderHandler.userOrder)
 
 export default orders;

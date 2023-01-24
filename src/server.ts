@@ -11,7 +11,7 @@ app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
 app.get('/', function (req: Request, res: Response) {
-  res.send('Hello World!');
+  res.send('Store Front Backend API!');
 });
 
 app.use(routes);

@@ -67,7 +67,7 @@ export class OrderStore {
         }
     }
 
-    async addProduct(quantity: number, orderId: string, productId: string): Promise<Order> {
+    async addProduct(quantity: number, orderId: string, productId: string) {
         // get order to see if it is active
         try {
             const ordersql = 'SELECT * FROM orders WHERE id=($1)'
@@ -100,6 +100,78 @@ export class OrderStore {
             return order
         } catch (err) {
             throw new Error(`Could not add product ${productId} to order ${orderId}: ${err}`)
+        }
+    }
+
+    async listProducts(orderId: string) {
+        // get order to see if it is active
+        try {
+            const ordersql = 'SELECT * FROM orders WHERE id=($1)'
+            const conn = await client.connect()
+
+            const result = await conn.query(ordersql, [orderId])
+
+            const order = result.rows[0]
+
+            if (order.status !== "active") {
+                throw new Error(`Could not list products in order ${orderId} because order status is ${order.status}`)
+            }
+
+            conn.release()
+        } catch (err) {
+            throw new Error(`${err}`)
+        }
+
+        try {
+            const sql = 'SELECT * FROM order_products WHERE order_id = ($1)'
+            const conn = await client.connect()
+
+            const result = await conn
+                .query(sql, [orderId])
+
+            const order = result.rows
+
+            conn.release()
+
+            return order
+        } catch (err) {
+            throw new Error(`Could not list products in order ${orderId}: ${err}`)
+        }
+    }
+
+    async removeProduct(orderId: string, productId: string) {
+        // get order to see if it is active
+        try {
+            const ordersql = 'SELECT * FROM orders WHERE id=($1)'
+            const conn = await client.connect()
+
+            const result = await conn.query(ordersql, [orderId])
+
+            const order = result.rows[0]
+
+            if (order.status !== "active") {
+                throw new Error(`Could not remove product ${productId} to order ${orderId} because order status is ${order.status}`)
+            }
+
+            conn.release()
+        } catch (err) {
+            throw new Error(`${err}`)
+        }
+
+        try {
+            const sql = 'DELETE FROM order_products WHERE order_id = ($1) AND product_id = ($2) RETURNING *'
+            const conn = await client.connect()
+
+            const result = await conn
+                .query(sql, [orderId, productId])
+
+            const order = result.rows[0]
+
+            conn.release()
+
+            return order
+        } catch (err) {
+            throw new Error(`Could not remove product ${productId} to order ${orderId}: ${err}`)
         }
     }
 
